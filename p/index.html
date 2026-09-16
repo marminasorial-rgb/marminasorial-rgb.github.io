@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>جاري الفتح...</title>
+</head>
+<body>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetId = urlParams.get('id');
+
+        if (targetId) {
+            const packageName = "io.kodular.drjohnyoussef.kedma"; // استبدله باسم حزمة تطبيقك
+            // هذا السطر يمرر القيمة ويجبر التطبيق على التحديث حتى لو كان يعمل في الخلفية
+            window.location.href = `intent://#Intent;package=${packageName};f=335544320;S.APP_INVENTOR_START=${targetId};end`;
+        } else {
+            // تحويل للصفحة الرئيسية لو الرابط فارغ
+            window.location.href = "marminasorial-rgb.github.io/";
+        }
+    </script>
+</body>
+</html>
