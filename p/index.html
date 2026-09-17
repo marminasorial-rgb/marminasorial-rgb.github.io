@@ -1,36 +1,80 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- وسوم المعاينة والصورة في واتساب وفيسبوك -->
-    <meta property="og:title" content="افتح المحتوى في التطبيق" />
-    <meta property="og:description" content="اضغط هنا للفتح المباشر داخل التطبيق." />
-    <meta property="og:image" content="https://marminaserial-rgb.github.io/assets/preview.png" />
+    <!-- ========================================== -->
+    <!--  وسوم المعاينة وصورة الشير (Open Graph)   -->
+    <!-- ========================================== -->
+    <meta property="og:title" content="شارك و شاهد" />
+    <meta property="og:description" content="اضغط هنا للفتح داخل التطبيق." />
+    <!-- ضعي صورة المعاينة باسم preview.png داخل مجلد p بنفسه -->
+    <meta property="og:image" content="https://marminaserial-rgb.github.io/p/preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://marminaserial-rgb.github.io/p/" />
     <meta property="og:type" content="website" />
 
+    <!-- وسوم لمنصة X (تويتر سابقاً) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="شارك و شاهد" />
+    <meta name="twitter:description" content="اضغط هنا للفتح داخل التطبيق." />
+    <meta name="twitter:image" content="https://marminaserial-rgb.github.io/p/preview.png" />
+
     <title>جاري فتح التطبيق...</title>
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .card {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+        }
+    </style>
 </head>
-<body style="text-align:center; font-family:sans-serif; padding-top:20vh; direction:rtl;">
-    <h2>جاري توجيهك إلى التطبيق...</h2>
-    <p>إذا لم يفتح التطبيق تلقائياً، اضغط على الزر أدناه:</p>
-    
-    <a id="openBtn" href="#" style="display:inline-block; padding:12px 24px; background-color:#007bff; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; margin-top:15px;">فتح التطبيق الآن</a>
+<body>
+    <div class="card">
+        <h2>جاري توجيهك إلى التطبيق...</h2>
+        <p>إذا لم يفتح التطبيق تلقائياً، اضغط على الزر هنا:</p>
+        <a id="openBtn" href="#" class="btn">فتح التطبيق الآن</a>
+    </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const targetId = urlParams.get('id');
         
-        // اسم الحزمة الحقيقي من واقع تطبيقك
+        // اسم الحزمة الخاص بك بالضبط
         const packageName = "io.kodular.drjohnyoussef.v1743"; 
 
         if (targetId) {
-            // صيغة الـ Intent الدقيقة المتوافقة مع متصفح كروم
-            const intentUrl = `intent://p?id=${targetId}#Intent;scheme=https;package=${packageName};f=335544320;S.APP_INVENTOR_START=${targetId};end`;
+            // رابط Intent موجه لمجلد /p/ على الدومين الخاص بك
+            const intentUrl = `intent://marminaserial-rgb.github.io/p?id=${encodeURIComponent(targetId)}#Intent;scheme=https;package=${packageName};f=335544320;S.APP_INVENTOR_START=${encodeURIComponent(targetId)};end`;
             
             document.getElementById('openBtn').href = intentUrl;
+            
+            // محاولة التحويل التلقائي
             window.location.href = intentUrl;
         } else {
             window.location.href = "https://marminaserial-rgb.github.io/";
