@@ -2,20 +2,39 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>جاري الفتح...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- وسوم المعاينة الاحترافية (Open Graph) -->
+    <meta property="og:title" content="خدمة ابتدائي" />
+    <meta property="og:description" content="اضغط هنا" />
+    <meta property="og:image" content="https://marminasorial-rgb.github.io/assets/preview.png" />
+    <meta property="og:url" content="https://marminasorial-rgb.github.io/p/" />
+    <meta property="og:type" content="website" />
+
+    <!-- وسوم لمنصة X (تويتر) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="خدمة ابتدائي" />
+    <meta name="twitter:description" content="اضغط هنا" />
+    <meta name="twitter:image" content="https://marminasorial-rgb.github.io/assets/preview.png" />
+
+    <title>جاري فتح التطبيق...</title>
 </head>
 <body>
+    <p style="text-align:center; margin-top:20vh; font-family:sans-serif;">جاري توجيهك إلى التطبيق...</p>
+
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const targetId = urlParams.get('id');
 
         if (targetId) {
-            const packageName = "io.kodular.drjohnyoussef.kedma"; // استبدله باسم حزمة تطبيقك
-            // هذا السطر يمرر القيمة ويجبر التطبيق على التحديث حتى لو كان يعمل في الخلفية
+            // استبدل هذا باسم حزمة تطبيقك الفعلية (Package Name)
+            const packageName = "io.kodular.drjohnyoussef.kedma"; 
+            
+            // تحويل الـ Intent وتحديث البيانات في كودولار
             window.location.href = `intent://#Intent;package=${packageName};f=335544320;S.APP_INVENTOR_START=${targetId};end`;
         } else {
-            // تحويل للصفحة الرئيسية لو الرابط فارغ
-            window.location.href = "marminasorial-rgb.github.io/";
+            // تحويل للصفحة الرئيسية في حال عدم وجود id
+            window.location.href = "https://yourusername.github.io/";
         }
     </script>
 </body>
