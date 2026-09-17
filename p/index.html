@@ -4,81 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- ========================================== -->
-    <!--  وسوم المعاينة وصورة الشير (Open Graph)   -->
-    <!-- ========================================== -->
-    <meta property="og:title" content="شارك و شاهد" />
-    <meta property="og:description" content="اضغط هنا للفتح داخل التطبيق." />
-    <!-- ضعي صورة المعاينة باسم preview.png داخل مجلد p بنفسه -->
+    <!-- ========================================================= -->
+    <!--  وسوم المعاينة وصورة الشير (Open Graph) للواتساب وفيسبوك  -->
+    <!-- ========================================================= -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="تطبيق مارمينا" />
+    <meta property="og:title" content="افتح المحتوى المباشر في التطبيق" />
+    <meta property="og:description" content="اضغط هنا للفتح التلقائي والمباشر داخل التطبيق." />
     <meta property="og:image" content="https://marminaserial-rgb.github.io/p/preview.png" />
+    <meta property="og:image:secure_url" content="https://marminaserial-rgb.github.io/p/preview.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://marminaserial-rgb.github.io/p/" />
-    <meta property="og:type" content="website" />
 
-    <!-- وسوم لمنصة X (تويتر سابقاً) -->
+    <!-- وسوم لمنصة X (تويتر) -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="شارك و شاهد" />
-    <meta name="twitter:description" content="اضغط هنا للفتح داخل التطبيق." />
+    <meta name="twitter:title" content="افتح المحتوى المباشر في التطبيق" />
+    <meta name="twitter:description" content="اضغط هنا للفتح التلقائي والمباشر داخل التطبيق." />
     <meta name="twitter:image" content="https://marminaserial-rgb.github.io/p/preview.png" />
 
     <title>جاري فتح التطبيق...</title>
 
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            text-align: center;
-            padding: 40px 20px;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f4f6f9;
+            color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .card {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 30px;
+        .container {
             background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 35px 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+        }
+        .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #1a252f;
+        }
+        p {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
         .btn {
-            display: inline-block;
-            padding: 14px 28px;
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
             background-color: #007bff;
             color: #ffffff;
             text-decoration: none;
-            border-radius: 10px;
-            font-weight: bold;
+            border-radius: 12px;
+            font-weight: 700;
             font-size: 16px;
-            margin-top: 20px;
-            box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+            box-shadow: 0 4px 12px rgba(0,123,255,0.25);
+            transition: background-color 0.2s ease;
+        }
+        .btn:active {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>جاري توجيهك إلى التطبيق...</h2>
-        <p>إذا لم يفتح التطبيق تلقائياً، اضغط على الزر هنا:</p>
+
+    <div class="container">
+        <div class="icon">🚀</div>
+        <h2>جاري تحويلك للتطبيق...</h2>
+        <p>إذا لم يفتح التطبيق تلقائياً خلال ثوانٍ، اضغط على الزر أدناه للفتح المباشر.</p>
         <a id="openBtn" href="#" class="btn">فتح التطبيق الآن</a>
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const targetId = urlParams.get('id');
-        
-        // اسم الحزمة الخاص بك بالضبط
-        const packageName = "io.kodular.drjohnyoussef.v1743"; 
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const rawId = urlParams.get('id');
 
-        if (targetId) {
-            // رابط Intent موجه لمجلد /p/ على الدومين الخاص بك
-            const intentUrl = `intent://marminaserial-rgb.github.io/p?id=${encodeURIComponent(targetId)}#Intent;scheme=https;package=${packageName};f=335544320;S.APP_INVENTOR_START=${encodeURIComponent(targetId)};end`;
-            
-            document.getElementById('openBtn').href = intentUrl;
-            
-            // محاولة التحويل التلقائي
-            window.location.href = intentUrl;
-        } else {
-            window.location.href = "https://marminaserial-rgb.github.io/";
-        }
+            // اسم الحزمة المباشر والرسمي للتطبيق
+            const packageName = "io.kodular.drjohnyoussef.v1743";
+
+            if (rawId !== null && rawId.trim() !== "") {
+                const encodedId = encodeURIComponent(rawId);
+                
+                // بناء أمر الـ Intent المحمي والمطابق لنظام متصفح Chrome وأندرويد
+                const intentUrl = `intent://marminaserial-rgb.github.io/p?id=${encodedId}#Intent;scheme=https;package=${packageName};f=335544320;S.APP_INVENTOR_START=${encodedId};end`;
+
+                // تحديث الزر اليدوي للتخطي الإجباري لحظر المتصفحات
+                const openBtn = document.getElementById('openBtn');
+                if (openBtn) {
+                    openBtn.href = intentUrl;
+                }
+
+                // محاولة التوجيه التلقائي المباشر
+                window.location.href = intentUrl;
+            } else {
+                // التوجيه للرئيسية في حالة انعدام وجود المعلمة id
+                window.location.href = "https://marminaserial-rgb.github.io/";
+            }
+        })();
     </script>
+
 </body>
 </html>
