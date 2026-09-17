@@ -3,39 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- وسوم المعاينة الاحترافية (Open Graph) -->
-    <meta property="og:title" content="خدمة ابتدائي" />
-    <meta property="og:description" content="اضغط هنا" />
+
+    <!-- ========================================================= -->
+    <!--  خاصية الصورة والمعاينة الاحترافية (Open Graph) للواتساب  -->
+    <!-- ========================================================= -->
+    <meta property="og:title" content="شارك و شاهد" />
+    <meta property="og:description" content="اضغط هنا للفتح المباشر داخل التطبيق." />
     <meta property="og:image" content="https://marminasorial-rgb.github.io/assets/preview.png" />
     <meta property="og:url" content="https://marminasorial-rgb.github.io/p/" />
     <meta property="og:type" content="website" />
 
-    <!-- وسوم لمنصة X (تويتر) -->
+    <!-- وسوم لمنصة X (تويتر سابقاً) -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="خدمة ابتدائي" />
-    <meta name="twitter:description" content="اضغط هنا" />
+    <meta name="twitter:title" content="شارك و شاهد" />
+    <meta name="twitter:description" content="اضغط هنا للفتح المباشر داخل التطبيق." />
     <meta name="twitter:image" content="https://marminasorial-rgb.github.io/assets/preview.png" />
 
     <title>جاري فتح التطبيق...</title>
 </head>
-<body>
-    <p style="text-align:center; margin-top:20vh; font-family:sans-serif;">جاري توجيهك إلى التطبيق...</p>
+<body style="text-align:center; font-family:sans-serif; padding-top:20vh; direction:rtl;">
+    <h2>جاري توجيهك إلى التطبيق...</h2>
+    <p>إذا لم يفتح التطبيق تلقائياً خلال ثوانٍ، اضغط على الزر أدناه:</p>
+    
+    <!-- زر يدوي لتخطي حظر متصفح كروم -->
+    <a id="openBtn" href="#" style="display:inline-block; padding:12px 24px; background-color:#007bff; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; margin-top:15px;">فتح التطبيق الآن</a>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const targetId = urlParams.get('id');
+        
+        // ⚠️ مهم جداً: استبدل com.yourname.appname باسم حزمة تطبيقك الحقيقي من كودولار
+        const packageName = "io.kodular.drjohnyoussef.kedma"; 
 
         if (targetId) {
-            // استبدل هذا باسم حزمة تطبيقك الفعلية (Package Name)
-            const packageName = "io.kodular.drjohnyoussef.kedma"; 
+            const intentUrl = `intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=${packageName};f=335544320;S.APP_INVENTOR_START=${targetId};end`;
             
-            // تحويل الـ Intent وتحديث البيانات في كودولار
-            window.location.href = `intent://#Intent;package=${packageName};f=335544320;S.APP_INVENTOR_START=${targetId};end`;
+            document.getElementById('openBtn').href = intentUrl;
+            window.location.href = intentUrl;
         } else {
-            // تحويل للصفحة الرئيسية في حال عدم وجود id
-            window.location.href = "https://yourusername.github.io/";
+            window.location.href = "https://marminasorial-rgb.github.io/";
         }
     </script>
 </body>
 </html>
+
+
+
+
