@@ -127,17 +127,25 @@
             const fullUrl = "https://marminasorial-rgb.github.io/p?id=" + encodedId;
 
             // ------------------------------------------------------------------
-            // بنبعت الـ id بأكتر من طريقة في نفس الـ intent عشان نضمن إن
-            // الـ StartValue في كودولار هتوصله، أياً كانت الآلية اللي شغالة
-            // فعليًا عندك (Deep Link Extension بيقرا الرابط كامل كـ StartValue،
-            // أو APP_INVENTOR_START كـ extra قديم/بديل):
-            //   - S.APP_INVENTOR_START  -> الطريقة القديمة (فيها Bug معروف
-            //     في كودولار أحيانًا بترجع فاضية)
-            //   - الرابط https نفسه اللي هيتفتح به الـ Intent هو نفسه
-            //     اللي هتستقبله في StartValue لو شغال عندك Deep Link Extension
-            // على جانب كودولار: اقرا StartValue وتعامل معاها إما كـ id مباشر
-            // أو كرابط لازم تستخرج منه id (شرح تفصيلي تحت).
+            // خط دفاع تالت مستقل تمامًا عن الـ StartValue/StartText:
+            // بننسخ الـ id للـ Clipboard ببادئة مميزة (KEDMA_ID::) قبل ما نفتح
+            // التطبيق. التطبيق بعدين بيقرا الكليبورد في Screen1.Initialize
+            // (Clipboard.GetText) بدل ما يعتمد على StartValue وحدها، لأن
+            // Clipboard مكون أصلي في كودولار مش محتاج Extension، ومش عنده
+            // نفس مشكلة الـ Bug بتاعة StartValue/Get Plain Start Text.
+            // البادئة KEDMA_ID:: مهمة جدًا عشان التطبيق يقدر يميز إن القيمة
+            // دي جايالها من اللينك ده تحديدًا، مش أي نص تاني اتنسخ قبل كده
+            // بالصدفة على نفس الجهاز.
             // ------------------------------------------------------------------
+            const clipboardPayload = "KEDMA_ID::" + rawId;
+            function copyIdToClipboard() {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(clipboardPayload).catch(function () {});
+                    }
+                } catch (e) { /* تجاهل أي خطأ صامت، الطرق التانية هتكمل شغلها */ }
+            }
+
             const intentUrl =
                 "intent://marminasorial-rgb.github.io/p?id=" + encodedId +
                 "#Intent;" +
@@ -151,6 +159,9 @@
 
             openBtn.href = intentUrl;
             storeBtn.href = playStoreUrl;
+            // كل ضغطة يدوية على الزرار بتنسخ القيمة تاني (بعض المتصفحات
+            // بتمنع الكتابة التلقائية للكليبورد من غير لمسة مستخدم فعلية)
+            openBtn.addEventListener('click', copyIdToClipboard);
 
             let appOpened = false;
 
@@ -162,6 +173,9 @@
                 appOpened = true;
             });
 
+            // ننسخ للكليبورد الأول قبل أي تنقّل
+            copyIdToClipboard();
+
             // المحاولة الأولى: تلقائيًا فور تحميل الصفحة
             window.location.href = intentUrl;
 
@@ -171,6 +185,7 @@
             // intent://)، بعض المتصفحات بتتعامل معاه كـ App Link عادي.
             setTimeout(function () {
                 if (appOpened || document.hidden) return;
+                copyIdToClipboard();
                 window.location.href = fullUrl;
             }, 2000);
 
