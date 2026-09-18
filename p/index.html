@@ -6,6 +6,7 @@
 
     <!-- ========================================================= -->
     <!--  وسوم المعاينة وصورة الشير (Open Graph) للواتساب وفيسبوك  -->
+    <!--  (تم الحفاظ عليها بالكامل بدون أي تعديل)                  -->
     <!-- ========================================================= -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="شارك و شاهد" />
@@ -78,6 +79,17 @@
         .btn:active {
             background-color: #0056b3;
         }
+        .btn.secondary {
+            margin-top: 12px;
+            background-color: #34c759;
+            box-shadow: 0 4px 12px rgba(52,199,89,0.25);
+        }
+        .btn.secondary:active { background-color: #279e46; }
+        .hint {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #b0b8bf;
+        }
     </style>
 </head>
 <body>
@@ -87,36 +99,91 @@
         <h2>جاري تحويلك للتطبيق...</h2>
         <p>إذا لم يفتح التطبيق تلقائياً خلال ثوانٍ، اضغط على الزر هنا للفتح المباشر.</p>
         <a id="openBtn" href="#" class="btn">فتح التطبيق الآن</a>
+        <a id="storeBtn" href="#" class="btn secondary" style="display:none;">تنزيل التطبيق من المتجر</a>
+        <div class="hint" id="hint"></div>
     </div>
 
     <script>
-        (function() {
+        (function () {
             const urlParams = new URLSearchParams(window.location.search);
             const rawId = urlParams.get('id');
 
-            // اسم الحزمة المباشر والرسمي للتطبيق
+            // اسم الحزمة الرسمي للتطبيق
             const packageName = "io.kodular.drjohnyoussef.kedma";
+            // رابط جوجل بلاي (يُستخدم كـ fallback لو التطبيق مش متثبت)
+            const playStoreUrl = "https://play.google.com/store/apps/details?id=" + packageName;
 
-            if (rawId !== null && rawId.trim() !== "") {
-                const encodedId = encodeURIComponent(rawId);
-                
-                // بناء أمر الـ Intent المحمي والمطابق لنظام متصفح Chrome وأندرويد
-                const intentUrl = `intent://marminasorial-rgb.github.io/p?id=${encodedId}#Intent;scheme=https;package=${packageName};f=335544320;S.APP_INVENTOR_START=${encodedId};end`;
+            const openBtn = document.getElementById('openBtn');
+            const storeBtn = document.getElementById('storeBtn');
+            const hint = document.getElementById('hint');
 
-                // تحديث الزر اليدوي للتخطي الإجباري لحظر المتصفحات
-                const openBtn = document.getElementById('openBtn');
-                if (openBtn) {
-                    openBtn.href = intentUrl;
-                }
-
-                // محاولة التوجيه التلقائي المباشر
-                window.location.href = intentUrl;
-            } else {
-                // التوجيه للرئيسية في حالة انعدام وجود المعلمة id
+            if (!rawId || rawId.trim() === "") {
+                // مفيش id في اللينك أصلاً -> روح للصفحة الرئيسية
                 window.location.href = "https://marminasorial-rgb.github.io/";
+                return;
             }
+
+            const encodedId = encodeURIComponent(rawId);
+            const fullUrl = "https://marminasorial-rgb.github.io/p?id=" + encodedId;
+
+            // ------------------------------------------------------------------
+            // بنبعت الـ id بأكتر من طريقة في نفس الـ intent عشان نضمن إن
+            // الـ StartValue في كودولار هتوصله، أياً كانت الآلية اللي شغالة
+            // فعليًا عندك (Deep Link Extension بيقرا الرابط كامل كـ StartValue،
+            // أو APP_INVENTOR_START كـ extra قديم/بديل):
+            //   - S.APP_INVENTOR_START  -> الطريقة القديمة (فيها Bug معروف
+            //     في كودولار أحيانًا بترجع فاضية)
+            //   - الرابط https نفسه اللي هيتفتح به الـ Intent هو نفسه
+            //     اللي هتستقبله في StartValue لو شغال عندك Deep Link Extension
+            // على جانب كودولار: اقرا StartValue وتعامل معاها إما كـ id مباشر
+            // أو كرابط لازم تستخرج منه id (شرح تفصيلي تحت).
+            // ------------------------------------------------------------------
+            const intentUrl =
+                "intent://marminasorial-rgb.github.io/p?id=" + encodedId +
+                "#Intent;" +
+                "scheme=https;" +
+                "package=" + packageName + ";" +
+                "category=android.intent.category.BROWSABLE;" +
+                "category=android.intent.category.DEFAULT;" +
+                "S.APP_INVENTOR_START=" + encodedId + ";" +
+                "S.browser_fallback_url=" + encodeURIComponent(playStoreUrl) + ";" +
+                "end";
+
+            openBtn.href = intentUrl;
+            storeBtn.href = playStoreUrl;
+
+            let appOpened = false;
+
+            // لو المستخدم سابح الصفحة (اتنقل فعلاً للتطبيق) هنعتبرها نجحت
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) appOpened = true;
+            });
+            window.addEventListener('pagehide', function () {
+                appOpened = true;
+            });
+
+            // المحاولة الأولى: تلقائيًا فور تحميل الصفحة
+            window.location.href = intentUrl;
+
+            // لو بعد ثانيتين لسه في نفس الصفحة (يعني فشلت المحاولة، غالبًا
+            // لأن المتصفح/الـ in-app browser مش فاهم صيغة intent://)
+            // نجرب طريقة تانية: نفتح نفس الرابط https مباشرة (من غير غلاف
+            // intent://)، بعض المتصفحات بتتعامل معاه كـ App Link عادي.
+            setTimeout(function () {
+                if (appOpened || document.hidden) return;
+                window.location.href = fullUrl;
+            }, 2000);
+
+            // لو بعد 4 ثواني التطبيق لسه ما اتفتحش، غالبًا مش متثبت،
+            // فبنظهر زرار التحميل من المتجر تلقائيًا.
+            setTimeout(function () {
+                if (appOpened || document.hidden) return;
+                storeBtn.style.display = 'block';
+                hint.textContent = 'لو التطبيق مش متثبت عندك، حمّله من هنا.';
+            }, 4000);
         })();
     </script>
 
 </body>
 </html>
+
