@@ -1,14 +1,11 @@
 [
   {
-    "relation": [
-      "delegate_permission/common.handle_all_urls"
-    ],
+    "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
       "package_name": "io.kodular.drjohnyoussef.kedma",
-      "sha256_cert_fingerprints": [
-        "D4:9B:21:A6:75:4A:27:4A:CE:FF:2C:29:D7:08:B9:6D:7B:A6:E1:0C:6F:E1:8B:48:10:3A:5E:B5:91:E4:3A:E9"
-      ]
+      "sha256_cert_fingerprints":
+        ["D4:9B:21:A6:75:4A:27:4A:CE:FF:2C:29:D7:08:B9:6D:7B:A6:E1:0C:6F:E1:8B:48:10:3A:5E:B5:91:E4:3A:E9"]
     }
   }
 ]
